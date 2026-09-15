@@ -19,7 +19,7 @@ use ffmpeg::util::format::Pixel;
 use ffmpeg::ffi::*;
 
 #[cfg(feature = "ndarray")]
-const AV_PIX_FMT_BGRA: AVPixelFormat = AVPixelFormat::AV_PIX_FMT_BGRA;
+const AV_PIX_FMT_BGRA: AVPixelFormat = AVPixelFormat::BGRA;
 
 #[cfg(feature = "ndarray")]
 const BGRA: Pixel = Pixel::BGRA;
@@ -371,9 +371,7 @@ struct ParametersWrapper2<'a>(AvCodecParametersRef<'a>);
 
 impl<'a> From<ParametersWrapper2<'a>> for AvCodecParameters {
     fn from(wrapper: ParametersWrapper2<'a>) -> Self {
-        unsafe {
-            AvCodecParameters::from_raw(wrapper.0.as_ptr() as *mut _).unwrap()
-        }
+        unsafe { AvCodecParameters::from_raw(wrapper.0.as_ptr() as *mut _).unwrap() }
     }
 }
 

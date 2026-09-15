@@ -594,9 +594,8 @@ impl DecoderSplit {
 
     #[cfg(feature = "ndarray")]
     fn raw_frame_to_time_and_frame(&self, frame: &mut RawFrame) -> Result<(Time, Frame)> {
-        // We use the packet DTS here (which is `frame->pkt_dts`) because that is what the
-        // encoder will use when encoding for the `PTS` field.
-        let timestamp = Time::new(Some(frame.packet().dts), self.decoder_time_base);
+        // Use the frame timestamp because `Video` does not expose the input packet directly.
+        let timestamp = Time::new(frame.pts(), self.decoder_time_base);
         let frame = ffi::convert_frame_to_ndarray_rgb24(frame).map_err(Error::BackendError)?;
 
         Ok((timestamp, frame))

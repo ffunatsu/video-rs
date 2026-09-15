@@ -79,17 +79,17 @@ impl HardwareAccelerationDeviceType {
 impl HardwareAccelerationDeviceType {
     pub fn from(value: ffmpeg::ffi::AVHWDeviceType) -> Option<HardwareAccelerationDeviceType> {
         match value {
-            ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_VDPAU => Some(Self::Vdpau),
-            ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_CUDA => Some(Self::Cuda),
-            ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_VAAPI => Some(Self::VaApi),
-            ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_DXVA2 => Some(Self::Dxva2),
-            ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_QSV => Some(Self::Qsv),
-            ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_VIDEOTOOLBOX => Some(Self::VideoToolbox),
-            ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_D3D11VA => Some(Self::D3D11Va),
-            ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_DRM => Some(Self::Drm),
-            ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_OPENCL => Some(Self::OpenCl),
-            ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_MEDIACODEC => Some(Self::MediaCodec),
-            ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_NONE => None,
+            ffmpeg::ffi::AVHWDeviceType::VDPAU => Some(Self::Vdpau),
+            ffmpeg::ffi::AVHWDeviceType::CUDA => Some(Self::Cuda),
+            ffmpeg::ffi::AVHWDeviceType::VAAPI => Some(Self::VaApi),
+            ffmpeg::ffi::AVHWDeviceType::DXVA2 => Some(Self::Dxva2),
+            ffmpeg::ffi::AVHWDeviceType::QSV => Some(Self::Qsv),
+            ffmpeg::ffi::AVHWDeviceType::VIDEOTOOLBOX => Some(Self::VideoToolbox),
+            ffmpeg::ffi::AVHWDeviceType::D3D11VA => Some(Self::D3D11Va),
+            ffmpeg::ffi::AVHWDeviceType::DRM => Some(Self::Drm),
+            ffmpeg::ffi::AVHWDeviceType::OPENCL => Some(Self::OpenCl),
+            ffmpeg::ffi::AVHWDeviceType::MEDIACODEC => Some(Self::MediaCodec),
+            ffmpeg::ffi::AVHWDeviceType::NONE => None,
             // FIXME: Find a way to handle the new variants in ffmpeg 7 without breaking backwards
             // compatibility...
             #[allow(unreachable_patterns)]
@@ -101,36 +101,18 @@ impl HardwareAccelerationDeviceType {
 impl From<HardwareAccelerationDeviceType> for ffmpeg::ffi::AVHWDeviceType {
     fn from(value: HardwareAccelerationDeviceType) -> Self {
         match value {
-            HardwareAccelerationDeviceType::Vdpau => {
-                ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_VDPAU
-            }
-            HardwareAccelerationDeviceType::Cuda => {
-                ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_CUDA
-            }
-            HardwareAccelerationDeviceType::VaApi => {
-                ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_VAAPI
-            }
-            HardwareAccelerationDeviceType::Dxva2 => {
-                ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_DXVA2
-            }
-            HardwareAccelerationDeviceType::Qsv => {
-                ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_QSV
-            }
+            HardwareAccelerationDeviceType::Vdpau => ffmpeg::ffi::AVHWDeviceType::VDPAU,
+            HardwareAccelerationDeviceType::Cuda => ffmpeg::ffi::AVHWDeviceType::CUDA,
+            HardwareAccelerationDeviceType::VaApi => ffmpeg::ffi::AVHWDeviceType::VAAPI,
+            HardwareAccelerationDeviceType::Dxva2 => ffmpeg::ffi::AVHWDeviceType::DXVA2,
+            HardwareAccelerationDeviceType::Qsv => ffmpeg::ffi::AVHWDeviceType::QSV,
             HardwareAccelerationDeviceType::VideoToolbox => {
-                ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_VIDEOTOOLBOX
+                ffmpeg::ffi::AVHWDeviceType::VIDEOTOOLBOX
             }
-            HardwareAccelerationDeviceType::D3D11Va => {
-                ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_D3D11VA
-            }
-            HardwareAccelerationDeviceType::Drm => {
-                ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_DRM
-            }
-            HardwareAccelerationDeviceType::OpenCl => {
-                ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_OPENCL
-            }
-            HardwareAccelerationDeviceType::MediaCodec => {
-                ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_MEDIACODEC
-            }
+            HardwareAccelerationDeviceType::D3D11Va => ffmpeg::ffi::AVHWDeviceType::D3D11VA,
+            HardwareAccelerationDeviceType::Drm => ffmpeg::ffi::AVHWDeviceType::DRM,
+            HardwareAccelerationDeviceType::OpenCl => ffmpeg::ffi::AVHWDeviceType::OPENCL,
+            HardwareAccelerationDeviceType::MediaCodec => ffmpeg::ffi::AVHWDeviceType::MEDIACODEC,
             HardwareAccelerationDeviceType::D3D12Va => {
                 unimplemented!()
             }

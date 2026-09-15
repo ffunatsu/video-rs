@@ -6,7 +6,7 @@ use ffmpeg::Dictionary as AvDictionary;
 
 /// A wrapper type for ffmpeg options.
 #[derive(Debug, Clone)]
-pub struct Options(AvDictionary<'static>);
+pub struct Options(AvDictionary);
 
 impl Options {
     /// Creates options such that ffmpeg will prefer TCP transport when reading RTSP stream (over
@@ -122,7 +122,7 @@ impl From<Options> for HashMap<String, String> {
     /// * `item` - Item to convert from.
     fn from(item: Options) -> Self {
         item.0
-            .into_iter()
+            .iter()
             .map(|(k, v)| (k.to_string(), v.to_string()))
             .collect()
     }

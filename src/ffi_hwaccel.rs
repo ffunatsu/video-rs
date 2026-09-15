@@ -41,10 +41,9 @@ impl Drop for HardwareDeviceContext {
 
 pub fn hwdevice_list_available_device_types() -> Vec<HardwareAccelerationDeviceType> {
     let mut hwdevice_types = Vec::new();
-    let mut hwdevice_type = unsafe {
-        ffmpeg::ffi::av_hwdevice_iterate_types(ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_NONE)
-    };
-    while hwdevice_type != ffmpeg::ffi::AVHWDeviceType::AV_HWDEVICE_TYPE_NONE {
+    let mut hwdevice_type =
+        unsafe { ffmpeg::ffi::av_hwdevice_iterate_types(ffmpeg::ffi::AVHWDeviceType::NONE) };
+    while hwdevice_type != ffmpeg::ffi::AVHWDeviceType::NONE {
         hwdevice_types.push(HardwareAccelerationDeviceType::from(hwdevice_type).unwrap());
         hwdevice_type = unsafe { ffmpeg::ffi::av_hwdevice_iterate_types(hwdevice_type) };
     }
@@ -77,7 +76,9 @@ pub fn codec_find_corresponding_hwaccel_pixfmt(
             let hw_config = ffmpeg::ffi::avcodec_get_hw_config(codec.as_ptr(), i);
             if !hw_config.is_null() {
                 let hw_config_supports_codec = (((*hw_config).methods) as i32
-                    & ffmpeg::ffi::AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX as i32)
+                    & std::mem::transmute::<_, i32>(
+                        ffmpeg::ffi::AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX,
+                    ))
                     != 0;
                 if hw_config_supports_codec && (*hw_config).device_type == hwaccel_type.into() {
                     break Some((*hw_config).pix_fmt.into());
@@ -96,7 +97,9 @@ pub fn codec_context_hwaccel_set_get_format(
 ) {
     unsafe {
         (*codec_context.as_mut_ptr()).opaque =
-            ffmpeg::ffi::AVPixelFormat::from(hw_pixfmt) as i32 as _;
+            std::mem::transmute::<ffmpeg::ffi::AVPixelFormat, i32>(
+                ffmpeg::ffi::AVPixelFormat::from(hw_pixfmt),
+            ) as _;
         (*codec_context.as_mut_ptr()).get_format = Some(hwaccel_get_format);
     }
 }
@@ -116,11 +119,11 @@ unsafe extern "C" fn hwaccel_get_format(
     pix_fmts: *const ffmpeg::ffi::AVPixelFormat,
 ) -> ffmpeg::ffi::AVPixelFormat {
     let mut p = pix_fmts;
-    while *p != ffmpeg::ffi::AVPixelFormat::AV_PIX_FMT_NONE {
+    while *p != ffmpeg::ffi::AVPixelFormat::NONE {
         if *p == std::mem::transmute::<i32, ffmpeg::ffi::AVPixelFormat>((*ctx).opaque as i32) {
             return *p;
         }
         p = p.add(1);
     }
-    ffmpeg::ffi::AVPixelFormat::AV_PIX_FMT_NONE
+    ffmpeg::ffi::AVPixelFormat::NONE
 }
